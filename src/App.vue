@@ -1,12 +1,31 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/">Stores</router-link> |
+      <router-link to="/inventory">Inventory</router-link> |
+      <router-link to="/logout">Logout</router-link>
+      <div id="username">
+	You are logged in as: {{ username }}
+      </div>
     </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+  export default {
+    data() {
+      const username = JSON.parse(localStorage.JWT).email
+      return {
+        username
+      }
+  },
+      mounted() {
+      console.log("mounted");
+    }
+
+  };
+</script>
 
 <style>
 #app {
@@ -18,6 +37,10 @@
 }
 
 #nav {
+  padding: 30px;
+}
+
+#username {
   padding: 30px;
 }
 
