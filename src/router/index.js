@@ -15,7 +15,14 @@ const routes = [
     path: '/about',
     name: 'About',
     component: About
-  },]
+  },
+  {
+    path: '/callback',
+    redirect: () => {
+      return { path: '/', query: null }
+    }
+  },
+]
 
 const router = new VueRouter({
   mode: 'history',
