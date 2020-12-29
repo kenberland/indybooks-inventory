@@ -21,6 +21,10 @@ export default {
     }
   },
   beforeMount: function() {
+    this.axios.get('https://api.coindesk.com/v1/bpi/currentprice.json').then((response) => {
+      console.log(response.data)
+    })
+
     try {
       const jwtJsDecode = require('jwt-js-decode');
       let parameters = this.$route.fullPath;
