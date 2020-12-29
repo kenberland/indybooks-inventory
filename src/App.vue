@@ -13,18 +13,28 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      const username = JSON.parse(localStorage.JWT).email
-      return {
-        username
-      }
-  },
-      mounted() {
-      console.log("mounted");
+export default {
+  data() {
+    const username = null;
+    return {
+      username
     }
-
-  };
+  },
+  beforeMount: function() {
+    try {
+      const jwtJsDecode = require('jwt-js-decode');
+      let parameters = this.$route.fullPath;
+      let re = /\/#id_token=(.+?)&/;
+      let token = parameters.match(re)[1];
+      let jwt = jwtJsDecode.jwtDecode(token);
+      localStorage.token = token;
+      localStorage.JWT = JSON.stringify(jwt.payload);
+      this.username = JSON.parse(localStorage.JWT).email;
+    } catch(err) {
+      console.log("error with JWT decode");
+    }
+  },
+};
 </script>
 
 <style>
