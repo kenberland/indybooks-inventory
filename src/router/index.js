@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
-import About from '@/views/About.vue'
+import Inventory from '@/views/Inventory.vue'
 
 Vue.use(VueRouter)
 
@@ -13,9 +13,9 @@ const routes = [
     props: true
   },
   {
-    path: '/about',
-    name: 'About',
-    component: About
+    path: '/inventory',
+    name: 'Inventory',
+    component: Inventory
   },
   {
     path: '/callback',
