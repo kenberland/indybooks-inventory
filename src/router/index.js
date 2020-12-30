@@ -9,7 +9,8 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    props: true
   },
   {
     path: '/about',
@@ -18,8 +19,21 @@ const routes = [
   },
   {
     path: '/callback',
-    redirect: () => {
-      return { path: '/', query: null }
+    redirect: to => {
+      const { hash } = to;
+
+      let parameters = hash;
+      let re = /#id_token=(.+?)&/;
+      let token = parameters.match(re)[1];
+
+      return {
+        path: '/',
+        component: 'Home',
+        hash: '',
+        query: {
+          token: token
+        }
+      }
     }
   },
 ]

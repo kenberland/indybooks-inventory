@@ -1,48 +1,67 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Stores</router-link> |
-      <router-link to="/inventory">Inventory</router-link> |
-      <router-link to="/logout">Logout</router-link>
-      <div id="username">
-	You are logged in as: {{ username }}
-      </div>
-    </div>
-    <router-view/>
+<div id="app">
+  <div id="nav">
+    <b-navbar>
+      <template slot="brand">
+        <b-navbar-item tag="router-link" :to="{ path: '/' }">
+          <img
+            class="logo"
+            src="@/assets/logo.png"
+            alt="IndyBuy! the locally independant sellers of the world"
+            >
+        </b-navbar-item>
+      </template>
+
+      <template slot="start">
+        <router-link class="navbar-item" to="/">Stores</router-link>
+        <router-link class="navbar-item" to="/inventory">Inventory</router-link>
+      </template>
+
+      <template slot="end">
+        <b-navbar-item tag="div">
+          <div class="buttons">
+            <template v-if="username">
+              <span>Logged in as {{ username }}</span>
+              <a class="button is-light">
+                Log out
+              </a>
+            </template>
+            <template v-else>
+              <a class="button is-light">
+                Log in
+              </a>
+            </template>
+          </div>
+        </b-navbar-item>
+      </template>
+    </b-navbar>
   </div>
+  <router-view/>
+</div>
 </template>
 
 <script>
+import * as jwtJsDecode from 'jwt-js-decode';
+
 export default {
   data() {
     const username = null;
-    return {
-      username
-    }
-  },
+   return {
+     username
+   }
+ },
   beforeMount: function() {
-    if(localStorage.token) {
-      this.axios.get('https://api.indybooks.net/v5/auth/my/stores', {
-        headers: {
-          'Authorization': localStorage.token
-        }
-      })
-      .then((response) => {
-        console.log(response.data)
-      })
-    }
-
-    try {
-      const jwtJsDecode = require('jwt-js-decode');
-      let parameters = this.$route.fullPath;
-      let re = /\/#id_token=(.+?)&/;
-      let token = parameters.match(re)[1];
+    if(this.$route.query.token) {
+      let token = this.$route.query.token;
       let jwt = jwtJsDecode.jwtDecode(token);
+      let jsonJwt = JSON.stringify(jwt.payload);
+
       localStorage.token = token;
-      localStorage.JWT = JSON.stringify(jwt.payload);
+      localStorage.JWT = jsonJwt
+      this.$router.push({ query: '' });
+    }
+    if(localStorage.JWT) {
       this.username = JSON.parse(localStorage.JWT).email;
-    } catch(err) {
-      console.log("error with JWT decode");
     }
   },
 };
@@ -72,5 +91,9 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+.navbar-item img.logo {
+    max-height: 4.5rem;
 }
 </style>
