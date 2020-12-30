@@ -22,7 +22,7 @@ export default {
   },
   beforeMount: function() {
     if(localStorage.token) {
-      this.axios.get('https://api.indybooks.net/v5/auth/test', {
+      this.axios.get('https://api.indybooks.net/v5/auth/my/stores', {
         headers: {
           'Authorization': localStorage.token
         }
