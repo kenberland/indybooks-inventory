@@ -21,13 +21,13 @@
         <b-navbar-item tag="div">
           <div class="buttons">
             <template v-if="username">
-              <span>Logged in as {{ username }}</span>
+              <span class="mr-1">Logged in as {{ username }}</span>
               <a class="button is-light">
                 Log out
               </a>
             </template>
             <template v-else>
-              <a class="button is-light">
+              <a class="button is-light" href="https://auth.indybooks.net/login?client_id=3878refd9tseverg173ghn3p3&response_type=token&scope=email+openid&redirect_uri=http://localhost:8080/callback">
                 Log in
               </a>
             </template>

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
 import Inventory from '@/views/Inventory.vue'
+import Book from '@/views/Book.vue'
 
 Vue.use(VueRouter)
 
@@ -11,6 +12,11 @@ const routes = [
     name: 'Home',
     component: Home,
     props: true
+  },
+  {
+    path: '/store/:store_id/isbn/:isbn',
+    name: 'Book',
+    component: Book
   },
   {
     path: '/inventory',
