@@ -1,7 +1,5 @@
 Parameters:
-  InventoryDomainName:
-    Value: inventory.indybooks.net
-    Type: String
+  InventoryDomainName: inventory.indybooks.net
 Mappings:
   RegionMap:
     us-east-1:
