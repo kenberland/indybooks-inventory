@@ -16,5 +16,6 @@ phases:
     commands:
       - echo post build ran at `date`
 artifacts:
+  base-directory: 'dist'
   files:
     - '**/*'
