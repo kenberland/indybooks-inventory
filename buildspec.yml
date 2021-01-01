@@ -5,28 +5,18 @@ env:
 phases:
   install:
     runtime-versions:
-        ruby: 2.7
+      nodejs: 12
   pre_build:
     commands:
-      - gem install bundler
-      - bundle config set without development
-      - bundle install --path vendor/bundle
+      - npm install
   build:
     commands:
-      - echo Building SHA $CODEBUILD_RESOLVED_SOURCE_VERSION
-      - bundle exec rspec spec/ --format RspecJunitFormatter --out out/report.xml
-      - echo "\$my_git_commit_sha = '$CODEBUILD_RESOLVED_SOURCE_VERSION'" > git_commit_sha.rb
-      - export BUCKET=indybooks-inventory-deployment-artifacts
+      - npm run build
+      - export BUCKET=indybooks-pipeline-inventory-fe-artifacts
       - aws cloudformation package --template-file template.yml --s3-bucket $BUCKET --output-template-file outputtemplate.yml
   post_build:
     commands:
       - echo post build ran at `date`
-reports:
-    rspec_reports:
-        files:
-            - report.xml
-        base-directory: out
-        file-format: JunitXml
 artifacts:
   files:
     - '**/*'
