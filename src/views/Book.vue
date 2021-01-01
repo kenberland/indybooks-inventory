@@ -2,30 +2,23 @@
 <section class="section">
   <div class="container">
     <div class="tile is-ancestor">
-      <div class="tile is-4">
-        <book-card
-          v-bind:image="book.image"
-          v-bind:title="book.title"
-          v-bind:authors="book.authors"
-          v-bind:publisher="book.publisher"
-          v-bind:publish_date="book.publish_date"
-          v-bind:binding="book.binding"
-          v-bind:isbn="book.isbn13"
-          />
+      <div class="tile is-parent is-4">
+        <article class="box tile is-child">
+          <book-card v-bind="book"/>
+        </article>
       </div>
-      <div class="tile is-8">
-        <div class="box" style="width: 100%;">
-          <p class="title is-4">Stock Information</p>
-          <b-field label="Quantity" label-position="on-border">
-            <b-field>
-              <b-numberinput class="has-text-left" controls-alignment="right" v-model="quantity"></b-numberinput>
-            </b-field>
-          </b-field>
-          <b-field label="Price" label-position="on-border">
-            <b-currency-input v-model="ask"/>
-          </b-field>
-          <b-promise-select v-model="delivery_promise"/>
-        </div>
+      <div class="tile is-parent is-8">
+        <article class="box tile is-child">
+          <stock-info v-bind="stock"/>
+        </article>
+      </div>
+    </div>
+
+    <div class="tile is-ancestor">
+      <div class="tile is-parent">
+        <article class="tile is-child box">
+          <scanner v-bind:store_id="this.store_id"/>
+        </article>
       </div>
     </div>
   </div>
@@ -34,29 +27,23 @@
 
 <script>
 import BookCard from '@/components/BookCard.vue';
-import BCurrencyInput from '@/components/BCurrencyInput.vue';
-import BPromiseSelect from '@/components/BPromiseSelect.vue';
+import StockInfo from '@/components/StockInfo.vue';
+import Scanner from '@/components/Scanner.vue';
 
 export default {
   name: 'Book',
-  components: { BookCard, BCurrencyInput, BPromiseSelect },
+  components: { BookCard, StockInfo, Scanner },
   data() {
     const book = {};
-    const isbn = null;
-    const store_id = null;
-    const delivery_promise = null;
-    const ask = null;
-    const quantity = null;
+    const stock = {};
     return {
       book,
-      isbn,
-      store_id,
-      delivery_promise,
-      quantity,
-      ask
+      stock,
+      store_id: null,
+      isbn: null
     }
   },
-  beforeMount: function() {
+  created: function() {
     this.store_id = this.$route.params.store_id;
     this.isbn = this.$route.params.isbn;
     if(localStorage.token) {
@@ -67,10 +54,12 @@ export default {
       })
       .then((response) => {
         this.book = response.data.book;
-        this.delivery_promise = response.data.delivery_promise;
-        this.ask = response.data.ask;
-        this.quantity = response.data.quantity;
-        console.log(response.data);
+        this.stock.price = response.data.price;
+        this.stock.quantity = response.data.quantity;
+        this.stock.delivery_promise = response.data.delivery_promise;
+        this.stock.store_id = this.store_id;
+        this.stock.isbn = this.isbn;
+        console.log(response);
       })
     }
   }

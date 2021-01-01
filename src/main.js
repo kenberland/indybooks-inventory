@@ -6,11 +6,13 @@ import router from './router'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import VueCurrencyInput from 'vue-currency-input'
+import VueQuagga from 'vue-quaggajs';
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(Buefy)
 Vue.use(VueCurrencyInput)
+Vue.use(VueQuagga);
 
 new Vue({
   router,
