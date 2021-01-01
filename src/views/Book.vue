@@ -1,28 +1,21 @@
 <template>
-<section class="section">
-  <div class="container">
-    <div class="tile is-ancestor">
-      <div class="tile is-parent is-4">
-        <article class="box tile is-child">
-          <book-card v-bind="book"/>
-        </article>
-      </div>
-      <div class="tile is-parent is-8">
-        <article class="box tile is-child">
-          <stock-info v-bind="stock"/>
-        </article>
-      </div>
+<div class="container">
+  <div class="tile is-ancestor">
+    <div class="tile is-parent is-4">
+      <article class="box tile is-child">
+        <book-card v-bind="book"/>
+      </article>
     </div>
-
-    <div class="tile is-ancestor">
-      <div class="tile is-parent">
-        <article class="tile is-child box">
-          <scanner v-bind:store_id="this.store_id"/>
-        </article>
-      </div>
+    <div class="tile is-parent is-8">
+      <article class="box tile is-child">
+        <stock-info v-bind="stock"/>
+      </article>
     </div>
   </div>
-</section>
+  <div class="tile is-ancestor">
+    <scanner v-bind:store_id="this.store_id"/>
+  </div>
+</div>
 </template>
 
 <script>
@@ -43,25 +36,37 @@ export default {
       isbn: null
     }
   },
-  created: function() {
+  watch: {
+    $route(to) {
+      this.store_id = to.params.store_id;
+      this.isbn = to.params.isbn;
+      this.updateBook();
+    }
+  },
+  methods: {
+    updateBook: function() {
+      if(localStorage.token) {
+        this.axios.get(`https://api.indybooks.net/v5/auth/inventory/stores/${this.store_id}/isbn/${this.isbn}`, {
+          headers: {
+            'Authorization': localStorage.token
+          }
+        })
+        .then((response) => {
+          this.book = response.data.book;
+          this.stock.price = response.data.price;
+          this.stock.quantity = response.data.quantity;
+          this.stock.delivery_promise = response.data.delivery_promise;
+          this.stock.store_id = this.store_id;
+          this.stock.isbn = this.isbn;
+          console.log(response);
+        })
+      }
+    }
+  },
+  mounted: function() {
     this.store_id = this.$route.params.store_id;
     this.isbn = this.$route.params.isbn;
-    if(localStorage.token) {
-      this.axios.get(`https://api.indybooks.net/v5/auth/inventory/stores/${this.store_id}/isbn/${this.isbn}`, {
-        headers: {
-          'Authorization': localStorage.token
-        }
-      })
-      .then((response) => {
-        this.book = response.data.book;
-        this.stock.price = response.data.price;
-        this.stock.quantity = response.data.quantity;
-        this.stock.delivery_promise = response.data.delivery_promise;
-        this.stock.store_id = this.store_id;
-        this.stock.isbn = this.isbn;
-        console.log(response);
-      })
-    }
+    this.updateBook();
   }
 }
 </script>

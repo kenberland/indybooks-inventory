@@ -1,12 +1,10 @@
 <template>
-<div style="width: 100%; overflow-x: hidden;">
-  <div class="media">
-    <div class="media-left">
-       <v-quagga :onDetected="logIt" :readerSize="readerSize" :readerTypes="['ean_reader']"/>
-    </div>
-    <div class="media-content">
-      <book-card/>
-    </div>
+<div class="tile is-parent box">
+  <article class="tile is-child is-4 pr-3">
+    <v-quagga :onDetected="updatePreview" :readerSize="readerSize" :aspectRatio="aspectRatio" :readerTypes="['ean_reader']"/>
+  </article>
+  <div class="tile is-child is-8 pl-3">
+    <book-card v-bind="book"/>
   </div>
 </div>
 </template>
@@ -23,36 +21,37 @@ export default {
   data() {
     return {
       readerSize: {
-        width: 280,
-        height: 200
+        width: 285,
+        height: 285
       },
-      detecteds: []
+      aspectRatio: { min: 1, max: 1 },
+      book: {}
     }
   },
   methods: {
-    getNewBook: function(isbn) {
+    updatePreview: function(data) {
+      const isbn = data.codeResult.code;
       if(localStorage.token) {
-        this.axios.put(`https://api.indybooks.net/v5/auth/inventory/stores/${this.store_id}/isbn/${isbn}`,
-        {
-          book: {
-            ask: this.localValue.price,
-            quantity: this.localValue.quantity,
-            delivery_promise: this.localValue.deliveryPromise,
-          }
-        },
-        {
+        this.axios.get(`https://api.indybooks.net/v5/auth/inventory/stores/${this.store_id}/isbn/${isbn}`, {
           headers: {
             'Authorization': localStorage.token
           }
         })
         .then((response) => {
-          console.log(response);
+          if(response.data.book) {
+            this.book = response.data.book;
+            this.book.store_id = this.store_id;
+            this.book.preview = true;
+          }
         })
       }
-    },
-    logIt: function(data) {
-      console.log('detected', data)
     }
   }
 }
 </script>
+
+<style>
+  #interactive video {
+    position: relative;
+  }
+</style>
