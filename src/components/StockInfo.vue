@@ -121,6 +121,9 @@ export default {
           this.closeLoading();
         })
         .catch(() => {
+          if(this.pile) {
+            this.goToNextBook();
+          }
           this.toast(false);
           this.closeLoading();
         })

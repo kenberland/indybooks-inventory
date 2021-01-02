@@ -1,4 +1,4 @@
-><template>
+<template>
 <div class="container">
   <b-progress :value="bookSpot()" :max="books.length" size="is-medium" show-value>
     {{ bookSpot() }} / {{ books.length }}
@@ -27,7 +27,7 @@ export default {
   components: { BookCard, StockInfo },
   data() {
     return {
-      book: {},
+      book: { loading: true },
       books: [],
       stock: { pile: true },
       store_id: null,
@@ -38,6 +38,7 @@ export default {
     $route(to) {
       this.store_id = to.params.store_id;
       this.isbn = to.params.isbn;
+      this.book.loading = true;
       this.updateBook();
     }
   },
@@ -57,6 +58,7 @@ export default {
         })
         .then((response) => {
           this.book = response.data.book;
+          this.book.loading = false;
           this.stock.price = response.data.price;
           this.stock.quantity = response.data.quantity;
           this.stock.delivery_promise = response.data.delivery_promise;
@@ -74,6 +76,7 @@ export default {
   mounted: function() {
     this.store_id = this.$route.params.store_id;
     this.isbn = this.$route.params.isbn;
+    this.book.loading = true;
     this.updateBook();
   },
 }
