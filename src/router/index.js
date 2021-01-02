@@ -11,7 +11,19 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    props: true
+    props: true,
+    beforeEnter: (to, from, next) => {
+      let re = /#id_token=(.+?)&/;
+      let matches = to.hash.match(re);
+
+      if(matches) {
+        let token = matches[1];
+        console.log(token);
+        next({ path: '/', query: { token: token }});
+      } else {
+        next();
+      }
+    }
   },
   {
     path: '/store/:store_id/isbn/:isbn',
@@ -22,25 +34,6 @@ const routes = [
     path: '/inventory',
     name: 'Inventory',
     component: Inventory
-  },
-  {
-    path: '/callback',
-    redirect: to => {
-      const { hash } = to;
-
-      let parameters = hash;
-      let re = /#id_token=(.+?)&/;
-      let token = parameters.match(re)[1];
-
-      return {
-        path: '/',
-        component: 'Home',
-        hash: '',
-        query: {
-          token: token
-        }
-      }
-    }
   },
 ]
 

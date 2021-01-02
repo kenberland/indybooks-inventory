@@ -27,7 +27,7 @@
               </a>
             </template>
             <template v-else>
-              <a class="button is-light" href="https://auth.indybooks.net/login?client_id=3878refd9tseverg173ghn3p3&response_type=token&scope=email+openid&redirect_uri=http://localhost:8080/callback">
+              <a class="button is-light" href="https://auth.indybooks.net/login?client_id=3878refd9tseverg173ghn3p3&response_type=token&scope=email+openid&redirect_uri=http://localhost:8080">
                 Log in
               </a>
             </template>
