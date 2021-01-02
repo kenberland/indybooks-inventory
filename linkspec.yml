@@ -6,13 +6,7 @@ phases:
   install:
     runtime-versions:
       nodejs: 12
-  pre_build:
   build:
     commands:
       - env
       - find
-  post_build:
-    commands:
-      - env
-      - find
-      
