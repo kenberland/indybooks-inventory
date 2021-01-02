@@ -8,5 +8,4 @@ phases:
       nodejs: 12
   build:
     commands:
-      - env
-      - find
+      - aws cloudfront update-distribution --id EI1W8K5Y962RA --default-root-object $IndexName
