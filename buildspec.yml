@@ -3,7 +3,7 @@ env:
   variables:
     INDY_ENV: test
   exported-variables:
-      - INDEX_NAME
+      - IndexName
 phases:
   install:
     runtime-versions:
@@ -18,8 +18,8 @@ phases:
       - export BAR=baz
   post_build:
     commands:
-      - export INDEX_NAME=index.$(date +%Y-%m-%d-%H-%M-%S).html
-      - cd dist && cp index.html $INDEX_NAME
+      - export IndexName=index.$(date +%Y-%m-%d-%H-%M-%S).html
+      - cd dist && cp index.html $IndexName
       - echo post build ran at `date`
 artifacts:
   base-directory: 'dist'
