@@ -1,0 +1,14 @@
+version: 0.2
+env:
+  variables:
+    INDY_ENV: test
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+  pre_build:
+  build:
+    commands:
+      - env
+      - find
+  post_build:

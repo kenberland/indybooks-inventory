@@ -14,7 +14,8 @@ phases:
       - npm run build
   post_build:
     commands:
-      - cd dist && cp index.html index.$(date +%s).html
+      - export INDEX_NAME=index.$(date +%Y-%m-%d-%H-%M-%S).html
+      - cd dist && cp index.html $INDEX_NAME
       - echo post build ran at `date`
 artifacts:
   base-directory: 'dist'
