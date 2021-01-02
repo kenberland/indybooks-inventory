@@ -2,6 +2,8 @@ version: 0.2
 env:
   variables:
     INDY_ENV: test
+    exported-variables:
+      - INDEX_NAME
 phases:
   install:
     runtime-versions:
