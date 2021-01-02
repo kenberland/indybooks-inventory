@@ -12,3 +12,7 @@ phases:
       - env
       - find
   post_build:
+    commands:
+      - env
+      - find
+      
