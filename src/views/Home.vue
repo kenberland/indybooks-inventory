@@ -24,9 +24,7 @@
 
   <b-table-column label="Gender" centered v-slot="props">
     <span>
-      <b-icon pack="fas"
-              :icon="props.row.gender === 'Male' ? 'mars' : 'venus'">
-      </b-icon>
+      <b-icon :icon="props.row.gender === 'Male' ? 'mars' : 'venus'"/>
       {{ props.row.gender }}
     </span>
   </b-table-column>
@@ -37,9 +35,8 @@
 export default {
   name: 'Home',
   data() {
-    const stores = []
     return {
-      stores
+      stores: []
     }
   },
   beforeMount: function() {

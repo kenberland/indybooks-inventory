@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     warpToBook: function() {
-      this.$router.push({name: 'Book', params: { book_id: this.book_id, isbn: this.isbn }});
+      this.$router.push({name: 'Book', params: { store_id: this.store_id, isbn: this.isbn }});
     }
   }
 }

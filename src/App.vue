@@ -14,7 +14,8 @@
 
       <template slot="start">
         <router-link class="navbar-item" to="/">Stores</router-link>
-        <router-link class="navbar-item" to="/store/4daced65-0bd0-569f-8376-be542d5ab23b/isbn/9780440330073">Inventory</router-link>
+        <router-link class="navbar-item" to="/inventory">Inventory</router-link>
+        <router-link class="navbar-item" to="/search">Search</router-link>
       </template>
 
       <template slot="end">
@@ -58,7 +59,7 @@ export default {
 
       localStorage.token = token;
       localStorage.JWT = jsonJwt
-      this.$router.push({ query: '' });
+      this.$router.replace({ query: '' });
     }
     if(localStorage.JWT) {
       this.username = JSON.parse(localStorage.JWT).email;

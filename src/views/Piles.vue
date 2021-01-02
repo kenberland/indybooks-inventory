@@ -5,6 +5,6 @@
 
 <script>
 export default {
-  name: 'Inventory',
+  name: 'Piles',
 }
 </script>

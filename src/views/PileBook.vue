@@ -1,5 +1,8 @@
-<template>
+><template>
 <div class="container">
+  <b-progress :value="bookSpot()" :max="books.length" size="is-medium" show-value>
+    {{ bookSpot() }} / {{ books.length }}
+  </b-progress>
   <div class="tile is-ancestor">
     <div class="tile is-parent is-4">
       <article class="box tile is-child">
@@ -12,26 +15,21 @@
       </article>
     </div>
   </div>
-  <div class="tile is-ancestor">
-    <scanner v-bind:store_id="this.store_id"/>
-  </div>
 </div>
 </template>
 
 <script>
 import BookCard from '@/components/BookCard.vue';
 import StockInfo from '@/components/StockInfo.vue';
-import Scanner from '@/components/Scanner.vue';
 
 export default {
   name: 'Book',
-  components: { BookCard, StockInfo, Scanner },
+  components: { BookCard, StockInfo },
   data() {
-    const book = {};
-    const stock = {};
     return {
-      book,
-      stock,
+      book: {},
+      books: [],
+      stock: { pile: true },
       store_id: null,
       isbn: null
     }
@@ -42,6 +40,12 @@ export default {
       this.isbn = to.params.isbn;
       this.updateBook();
     }
+  },
+  beforeMount: function() {
+    this.books = [
+      { 'isbn': '1400032717', 'title': 'The Curious Incident of the Dog in the Night-Time', 'binding': 'Paperback' },
+      { 'isbn': '0440330076', 'title': 'Go Tell It on the Mountain', 'binding': 'Mass Market Paperback' },
+    ]
   },
   methods: {
     updateBook: function() {
@@ -58,15 +62,20 @@ export default {
           this.stock.delivery_promise = response.data.delivery_promise;
           this.stock.store_id = this.store_id;
           this.stock.isbn = this.isbn;
+          this.stock.pile = true;
         })
       }
-    }
+    },
+    bookSpot: function() {
+      const index = this.books.findIndex(book => book.isbn === this.isbn);
+      return index + 1;
+    },
   },
   mounted: function() {
     this.store_id = this.$route.params.store_id;
     this.isbn = this.$route.params.isbn;
     this.updateBook();
-  }
+  },
 }
 </script>
 
