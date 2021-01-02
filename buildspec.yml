@@ -12,6 +12,8 @@ phases:
   build:
     commands:
       - npm run build
+      - export FOO=bar
+      - export BAR=baz
   post_build:
     commands:
       - export INDEX_NAME=index.$(date +%Y-%m-%d-%H-%M-%S).html
