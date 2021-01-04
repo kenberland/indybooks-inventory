@@ -47,24 +47,6 @@ export default {
       { 'id': 4, 'first_name': 'Clarence', 'last_name': 'Flores', 'date': '2016/04/10 10:28:46', 'gender': 'Male' },
       { 'id': 5, 'first_name': 'Anne', 'last_name': 'Lee', 'date': '2016/12/06 14:38:38', 'gender': 'Female' }
     ]
-    if(localStorage.token) {
-      this.axios.get('https://api.indybooks.net/v5/auth/my/stores', {
-        headers: {
-          'Authorization': localStorage.token
-        }
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      this.axios.get('https://api.indybooks.net/v5/auth/inventory/stores/1234/isbn/5678', {
-        headers: {
-          'Authorization': localStorage.token
-        }
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-    }
   }
 }
 </script>
