@@ -13,10 +13,10 @@
     <b-promise-select v-model="localValue.deliveryPromise"/>
   </b-field>
   <div class="buttons" v-if="pile">
-    <b-button type="is-primary" expanded v-on:click="updateStockInfo">Update and Next</b-button>
+    <b-button type="is-primary" expanded @click="updateStockInfo">Update and Next</b-button>
   </div>
   <div class="buttons" v-else>
-    <b-button type="is-primary" expanded v-on:click="updateStockInfo">Update</b-button>
+    <b-button type="is-primary" expanded @click="updateStockInfo">Update</b-button>
   </div>
   <b-loading :is-full-page="false" v-model="isLoading" :can-cancel="true"/>
 </div>

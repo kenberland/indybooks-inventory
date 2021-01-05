@@ -6,6 +6,7 @@ import Book from '@/views/Book.vue'
 import Search from '@/views/Search.vue'
 import Piles from '@/views/Piles.vue'
 import Pile from '@/views/Pile.vue'
+import PileScanner from '@/views/PileScanner.vue'
 import PileBook from '@/views/PileBook.vue'
 
 Vue.use(VueRouter)
@@ -53,6 +54,11 @@ const routes = [
     path: '/store/:store_id/piles/:pile_id',
     name: 'Pile',
     component: Pile
+  },
+  {
+    path: '/store/:store_id/piles/:pile_id/scanner',
+    name: 'PileScanner',
+    component: PileScanner
   },
   {
     path: '/store/:store_id/piles/:pile_id/isbn/:isbn',
