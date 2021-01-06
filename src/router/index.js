@@ -51,17 +51,17 @@ const routes = [
     component: Piles
   },
   {
-    path: '/store/:store_id/piles/:pile_id',
+    path: '/piles/:pile_id',
     name: 'Pile',
     component: Pile
   },
   {
-    path: '/store/:store_id/piles/:pile_id/scanner',
+    path: '/piles/:pile_id/scanner',
     name: 'PileScanner',
     component: PileScanner
   },
   {
-    path: '/store/:store_id/piles/:pile_id/isbn/:isbn',
+    path: '/piles/:pile_id/isbn/:isbn',
     name: 'PileBook',
     component: PileBook
   },

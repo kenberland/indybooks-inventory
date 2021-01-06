@@ -38,12 +38,15 @@ export default {
     }
   },
   beforeMount: function() {
-    this.books = [
-      { 'isbn': '1400032717', 'title': 'The Curious Incident of the Dog in the Night-Time', 'binding': 'Paperback' },
-      { 'isbn': '0440330076', 'title': 'Go Tell It on the Mountain', 'binding': 'Mass Market Paperback' },
-    ]
     if(localStorage.token) {
-      console.log('This is where I get the pile externally and load it into stores');
+      this.axios.get(`https://api.indybooks.net/v5/auth/pile/${this.$route.params.pile_id}`, {
+        headers: {
+          'Authorization': localStorage.token
+        }
+      })
+      .then((response) => {
+        this.books = response.data.pile.isbn_list;
+      })
     }
   },
   methods: {

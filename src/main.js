@@ -7,7 +7,9 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import VueCurrencyInput from 'vue-currency-input'
 import VueQuagga from 'vue-quaggajs';
+import LogRocket from 'logrocket';
 
+LogRocket.init('avssbk/indybooks');
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(Buefy)
