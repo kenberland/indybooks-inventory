@@ -25,6 +25,7 @@
 <script>
 import BCurrencyInput from '@/components/BCurrencyInput.vue';
 import BPromiseSelect from '@/components/BPromiseSelect.vue';
+import { mapState } from 'vuex'
 
 export default {
   name: 'StockInfo',
@@ -33,7 +34,6 @@ export default {
     price: Number,
     quantity: Number,
     delivery_promise: String,
-    store_id: String,
     isbn: String,
     pile: {
       type: Boolean,
@@ -61,6 +61,12 @@ export default {
       this.localValue.deliveryPromise = value;
     }
   },
+  computed: {
+    ...mapState({
+      books: state => state.pile.books,
+      store_id: state => state.store.uuid
+    }),
+  },
   methods: {
     openLoading: function() {
       this.isLoading = true;
@@ -85,15 +91,9 @@ export default {
       }
     },
     goToNextBook: function() {
-      // when working, load books from server based on pile_id
-      const books = [
-        { 'isbn': '1400032717', 'title': 'The Curious Incident of the Dog in the Night-Time', 'binding': 'Paperback' },
-        { 'isbn': '0440330076', 'title': 'Go Tell It on the Mountain', 'binding': 'Mass Market Paperback' },
-      ]
-
-      const index = books.findIndex(book => book.isbn === this.isbn);
-      if(books[index+1]) {
-        const book = books.find(book => book.isbn === books[index + 1].isbn);
+      const index = this.books.findIndex(book => book.isbn === this.isbn);
+      if(this.books[index+1]) {
+        const book = this.books.find(book => book.isbn === this.books[index + 1].isbn);
         this.$router.push({name: 'PileBook', params: { store_id: this.store_id, pile: this.$route.params.pile_id, isbn: book.isbn }});
       } else {
         this.$router.push({name: 'Pile', params: { store_id: this.store_id, pile: this.$route.params.pile_id }});
@@ -102,6 +102,7 @@ export default {
     updateStockInfo: function() {
       this.openLoading();
       if(localStorage.token) {
+        console.log(this.store_id);
         this.axios.put(`https://api.indybooks.net/v5/auth/inventory/stores/${this.store_id}/isbn/${this.isbn}`, {
           book: {
             ask: this.localValue.price,

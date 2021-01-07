@@ -1,5 +1,6 @@
 <template>
 <div class="container">
+  <b-crumb/>
   <div class="buttons">
     <b-button type="is-primary" expanded @click="createPile">
       Start a new pile
@@ -22,14 +23,25 @@
 </template>
 
 <script>
+import BCrumb from '@/components/BCrumb.vue';
+import { mapState } from 'vuex'
+
 export default {
-  name: 'Inventory',
+  name: 'Store',
+  components: { BCrumb },
   data() {
     return {
-      piles: [],
+      piles: []
     }
   },
+  computed: {
+    ...mapState({
+      store_id: state => state.store.uuid
+    })
+  },
   beforeMount() {
+    this.$store.commit('store/uuid', this.$route.params.store_id);
+    this.$store.commit('pile/books', []);
     if(localStorage.token) {
       this.getPiles();
     }
@@ -55,14 +67,14 @@ export default {
     createPile: function() {
       this.axios.post(`https://api.indybooks.net/v5/auth/pile`, {
         pile: {
-          isbn: []
+          book_list: []
         }
       }, {
         headers: {
           'Authorization': localStorage.token
         }
       })
-      .then((response) => {
+        .then((response) => {
         this.getPiles();
         console.log(response);
       })
@@ -73,6 +85,6 @@ export default {
     warpToPile: function(uuid) {
       this.$router.push({name: 'Pile', params: { store_id: this.store_id, pile_id: uuid }});
     }
-  }
+  },
 }
 </script>

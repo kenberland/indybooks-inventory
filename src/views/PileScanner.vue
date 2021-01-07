@@ -11,45 +11,47 @@
 
 <script>
 import Scanner from '@/components/Scanner.vue';
+import { mapState } from 'vuex'
+
 export default {
   name: 'PileScanner',
   components: { Scanner },
   data() {
     return {
-      books: []
+      books: this.startingBooks
     }
   },
   watch: {
-    books(value) {
-      this.axios.put(`https://api.indybooks.net/v5/auth/pile/${this.$route.params.pile_id}`, {
-        pile: {
-          isbn: value.map(book => book.isbn)
-        }
-      }, {
-        headers: {
-          'Authorization': localStorage.token
-        }
-      })
-      .then((response) => {
-          console.log(response);
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-      console.log(value);
+    books: function(value) {
+      if(typeof(value) !== 'undefined') {
+        const bookList = value.map(book => {
+          return { isbn: book.isbn, title: book.title }
+        });
+        this.axios.put(`https://api.indybooks.net/v5/auth/pile/${this.$route.params.pile_id}`, {
+          pile: {
+            book_list: bookList
+          }
+        }, {
+          headers: {
+            'Authorization': localStorage.token
+          }
+        })
+        .then(() => {
+          this.$store.commit('pile/books', bookList);
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+      }
     }
   },
-  beforeMount: function() {
-    if(localStorage.token) {
-      this.axios.get(`https://api.indybooks.net/v5/auth/pile/${this.$route.params.pile_id}`, {
-        headers: {
-          'Authorization': localStorage.token
-        }
-      })
-      .then((response) => {
-        this.books = response.data.pile.isbn_list;
-      })
-    }
+  beforeMount() {
+    this.books = this.startingBooks;
+  },
+  computed: {
+    ...mapState({
+      startingBooks: state => state.pile.books
+    }),
   },
   methods: {
     warpToPile: function() {

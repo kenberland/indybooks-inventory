@@ -21,6 +21,7 @@
 <script>
 import BookCard from '@/components/BookCard.vue';
 import StockInfo from '@/components/StockInfo.vue';
+import { mapState } from 'vuex'
 
 export default {
   name: 'Book',
@@ -28,7 +29,6 @@ export default {
   data() {
     return {
       book: { loading: true },
-      books: [],
       stock: { pile: true },
       store_id: null,
       isbn: null
@@ -42,11 +42,10 @@ export default {
       this.updateBook();
     }
   },
-  beforeMount: function() {
-    this.books = [
-      { 'isbn': '1400032717', 'title': 'The Curious Incident of the Dog in the Night-Time', 'binding': 'Paperback' },
-      { 'isbn': '0440330076', 'title': 'Go Tell It on the Mountain', 'binding': 'Mass Market Paperback' },
-    ]
+  computed: {
+    ...mapState({
+      books: state => state.pile.books
+    }),
   },
   methods: {
     updateBook: function() {

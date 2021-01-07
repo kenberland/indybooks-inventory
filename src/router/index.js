@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
-import Inventory from '@/views/Inventory.vue'
 import Book from '@/views/Book.vue'
+import Store from '@/views/Store.vue'
 import Search from '@/views/Search.vue'
-import Piles from '@/views/Piles.vue'
 import Pile from '@/views/Pile.vue'
 import PileScanner from '@/views/PileScanner.vue'
 import PileBook from '@/views/PileBook.vue'
@@ -31,14 +30,20 @@ const routes = [
     }
   },
   {
+    path: '/store/:store_id',
+    name: 'Store',
+    component: Store,
+    meta: {
+      breadcrumbs: [
+        { name: 'Stores', route: { name: 'Home' }, active: false },
+        { name: 'Piles', active: true }
+      ]
+    }
+  },
+  {
     path: '/store/:store_id/isbn/:isbn',
     name: 'Book',
     component: Book
-  },
-  {
-    path: '/inventory',
-    name: 'Inventory',
-    component: Inventory
   },
   {
     path: '/search',
@@ -46,14 +51,16 @@ const routes = [
     component: Search
   },
   {
-    path: '/store/:store_id/piles',
-    name: 'Piles',
-    component: Piles
-  },
-  {
-    path: '/piles/:pile_id',
+    path: '/store/:store_id/piles/:pile_id',
     name: 'Pile',
-    component: Pile
+    component: Pile,
+    meta: {
+      breadcrumbs: [
+        { name: 'Stores', route: { name: 'Home' }, active: false },
+        { name: 'Piles', route: { name: 'Store' }, active: false },
+        { name: 'Pile', active: true }
+      ]
+    }
   },
   {
     path: '/piles/:pile_id/scanner',

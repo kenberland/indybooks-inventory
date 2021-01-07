@@ -14,7 +14,6 @@
 
       <template slot="start">
         <router-link class="navbar-item" to="/">Stores</router-link>
-        <router-link class="navbar-item" to="/inventory">Inventory</router-link>
         <router-link class="navbar-item" to="/search">Search</router-link>
       </template>
 
