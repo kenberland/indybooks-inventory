@@ -68,7 +68,7 @@ const routes = [
     component: PileScanner
   },
   {
-    path: '/piles/:pile_id/isbn/:isbn',
+    path: '/store/:store_id/piles/:pile_id/isbn/:isbn',
     name: 'PileBook',
     component: PileBook
   },

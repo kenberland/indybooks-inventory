@@ -17,6 +17,12 @@ export default {
   components: { BookCard },
   props: {
     store_id: String,
+    store_ids: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    },
     pile: {
       type: Boolean,
       default: false

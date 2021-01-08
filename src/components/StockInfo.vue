@@ -3,14 +3,29 @@
   <p class="title is-4">Stock Information</p>
   <b-field label="Quantity" label-position="on-border">
     <b-field>
-      <b-numberinput class="has-text-left" controls-alignment="right" v-model="localValue.quantity"/>
+      <template v-if="loading">
+        <b-numberinput class="has-text-left" controls-alignment="right" loading/>
+      </template>
+      <template v-else>
+        <b-numberinput class="has-text-left" min="0" controls-alignment="right" v-model="localValue.quantity"/>
+      </template>
     </b-field>
   </b-field>
   <b-field label="Price" label-position="on-border">
-    <b-currency-input v-model="localValue.price"/>
+    <template v-if="loading">
+      <b-numberinput loading :controls="false"/>
+    </template>
+    <template v-else>
+      <b-currency-input v-model="localValue.price"/>
+    </template>
   </b-field>
   <b-field label="Delivery Time" label-position="on-border">
-    <b-promise-select v-model="localValue.deliveryPromise"/>
+    <template v-if="loading">
+      <b-select placeholder="Select Delivery Time" icon="truck-fast" expanded loading/>
+    </template>
+    <template v-else>
+      <b-promise-select v-model="localValue.deliveryPromise"/>
+    </template>
   </b-field>
   <div class="buttons" v-if="pile">
     <b-button type="is-primary" expanded @click="updateStockInfo">Update and Next</b-button>
@@ -18,7 +33,7 @@
   <div class="buttons" v-else>
     <b-button type="is-primary" expanded @click="updateStockInfo">Update</b-button>
   </div>
-  <b-loading :is-full-page="false" v-model="isLoading" :can-cancel="true"/>
+  <b-loading :is-full-page="false" v-model="updating" :can-cancel="true"/>
 </div>
 </template>
 
@@ -38,7 +53,11 @@ export default {
     pile: {
       type: Boolean,
       default: false
-    }
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
   },
   data() {
     return {
@@ -47,7 +66,7 @@ export default {
         quantity: 0,
         deliveryPromise: null,
       },
-      isLoading: false
+      updating: false
     }
   },
   watch: {
@@ -68,11 +87,11 @@ export default {
     }),
   },
   methods: {
-    openLoading: function() {
-      this.isLoading = true;
+    openUpdating: function() {
+      this.updating = true;
     },
-    closeLoading: function() {
-      this.isLoading = false;
+    closeUpdating: function() {
+      this.updating = false;
     },
     toast: function(success) {
       if(success) {
@@ -100,9 +119,8 @@ export default {
       }
     },
     updateStockInfo: function() {
-      this.openLoading();
+      this.openUpdating();
       if(localStorage.token) {
-        console.log(this.store_id);
         this.axios.put(`https://api.indybooks.net/v5/auth/inventory/stores/${this.store_id}/isbn/${this.isbn}`, {
           book: {
             ask: this.localValue.price,
@@ -119,14 +137,14 @@ export default {
             this.goToNextBook();
           }
           this.toast(true);
-          this.closeLoading();
+          this.closeUpdating();
         })
         .catch(() => {
           if(this.pile) {
             this.goToNextBook();
           }
           this.toast(false);
-          this.closeLoading();
+          this.closeUpdating();
         })
       }
     }

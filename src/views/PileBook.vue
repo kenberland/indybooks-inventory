@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       book: { loading: true },
-      stock: { pile: true },
+      stock: { pile: true, loading: true },
       store_id: null,
       isbn: null
     }
@@ -39,7 +39,7 @@ export default {
       this.store_id = to.params.store_id;
       this.isbn = to.params.isbn;
       this.book.loading = true;
-      this.updateBook();
+      this.getBook();
     }
   },
   computed: {
@@ -48,7 +48,8 @@ export default {
     }),
   },
   methods: {
-    updateBook: function() {
+    getBook: function() {
+      this.stock.loading = true;
       if(localStorage.token) {
         this.axios.get(`https://api.indybooks.net/v5/auth/inventory/stores/${this.store_id}/isbn/${this.isbn}`, {
           headers: {
@@ -64,6 +65,7 @@ export default {
           this.stock.store_id = this.store_id;
           this.stock.isbn = this.isbn;
           this.stock.pile = true;
+          this.stock.loading = false;
         })
       }
     },
@@ -72,11 +74,28 @@ export default {
       return index + 1;
     },
   },
+  beforeMount: function() {
+    this.$store.commit('store/uuid', this.$route.params.store_id);
+    if(localStorage.token && this.books.length === 0) {
+      this.axios.get(`https://api.indybooks.net/v5/auth/pile/${this.$route.params.pile_id}`, {
+        headers: {
+          'Authorization': localStorage.token
+        }
+      })
+      .then((response) => {
+        this.loading = false;
+        this.$store.commit('pile/books', response.data.pile.book_list);
+      })
+      .catch(() => {
+        this.loading = false;
+      })
+    }
+  },
   mounted: function() {
     this.store_id = this.$route.params.store_id;
     this.isbn = this.$route.params.isbn;
     this.book.loading = true;
-    this.updateBook();
+    this.getBook();
   },
 }
 </script>

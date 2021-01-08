@@ -9,7 +9,8 @@
   <b-table
     :data="piles"
     :hoverable="true"
-    :mobile-cards="true">
+    :mobile-cards="true"
+    :loading="loading">
 
     <b-table-column field="id" label="Id" width="40" numeric centered v-slot="props">
       {{ props.row.id }}
@@ -31,7 +32,8 @@ export default {
   components: { BCrumb },
   data() {
     return {
-      piles: []
+      piles: [],
+      loading: true
     }
   },
   computed: {
@@ -55,11 +57,13 @@ export default {
       })
       .then((response) => {
         this.piles = response.data.user_pile.pile_uuid_list.map(pile => {
+          this.loading = false;
           return { id: pile }
         });
       })
       .catch((err) => {
         if(err.response.status === 404) {
+          this.loading = false;
           console.log('No Piles');
         }
       })
@@ -74,11 +78,21 @@ export default {
           'Authorization': localStorage.token
         }
       })
-        .then((response) => {
+      .then((response) => {
         this.getPiles();
-        console.log(response);
+        this.$buefy.toast.open({
+          duration: 2000,
+          message: `Created new Pile <b>${response.data.uuid}</b>`,
+          position: 'is-bottom',
+        });
       })
       .catch((err) => {
+        this.$buefy.toast.open({
+          duration: 2000,
+          message: `Could not create Pile`,
+          position: 'is-bottom',
+          type: 'is-danger'
+        });
         console.error(err);
       })
     },

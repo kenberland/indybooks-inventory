@@ -45,6 +45,7 @@ export default {
     }
   },
   beforeMount: function() {
+    this.$store.commit('store/uuid', this.$route.params.store_id);
     if(localStorage.token) {
       this.axios.get(`https://api.indybooks.net/v5/auth/pile/${this.$route.params.pile_id}`, {
         headers: {
